@@ -1,22 +1,24 @@
+//This program can shink a picture whose resolution is 480*640
 #include<stdio.h>
 #include<stdlib.h>
 
-#define row 480
-#define column 640
+#define row 480     //set the row of the picture
+#define column 640  //set the column of the picture
 
 int main(int argc, char** argv)
 {
 	int i,j;
 	int	threshold;
 	char *ifile, *ofile;
+	// judge whether the number of input parameter is right
 	if (argc != 4)
 	{
 		fprintf(stderr, "usage: %s input output threshold\n", argv[0]);
 		exit(1);
 	}
-	ifile = argv[1];
-	ofile = argv[2];
-	threshold = atoi(argv[3]);
+	ifile = argv[1];  // get the input file
+	ofile = argv[2];  // get the output file
+	threshold = atoi(argv[3]); // get the reduction factor
 	printf("threshold=%d\n", threshold);
 
 	//open input file

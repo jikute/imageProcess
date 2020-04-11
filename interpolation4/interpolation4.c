@@ -1,3 +1,6 @@
+/*this program is used to zoom a picture whose resolusion is 120*160.
+It can zoom the picture four times than before by interpolation.
+*/
 #include<stdio.h>
 #include<stdlib.h>
 

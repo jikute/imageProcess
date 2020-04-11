@@ -1,3 +1,6 @@
+/*
+This program can zoom a picture whose resolution is 30*40.
+*/
 #include<stdio.h>
 #include<stdlib.h>
 
