@@ -1,0 +1,2 @@
+E:\C_file\interpolation16\Debug\interpolation16.exe
+E:\C_file\interpolation16\Debug\interpolation16.pdb
