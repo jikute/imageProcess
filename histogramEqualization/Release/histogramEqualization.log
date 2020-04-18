@@ -1,0 +1,8 @@
+﻿  histogramEqualization.c
+E:\C_file\histogramEqualization\histogramEqualization.c(63,20): warning C4047: 'function': 'unsigned char *' differs in levels of indirection from 'unsigned char [480][640]'
+E:\C_file\histogramEqualization\histogramEqualization.c(63,20): warning C4024: 'getHistogram': different types for formal and actual parameter 1
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 6 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  histogramEqualization.vcxproj -> E:\C_file\histogramEqualization\Release\histogramEqualization.exe
