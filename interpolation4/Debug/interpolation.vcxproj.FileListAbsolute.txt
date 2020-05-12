@@ -1,4 +1,0 @@
-E:\C_file\interpolation\Debug\interpolation4.exe
-E:\C_file\interpolation\Debug\interpolation4.pdb
-E:\C_file\interpolation4\Debug\interpolation4.exe
-E:\C_file\interpolation4\Debug\interpolation4.pdb

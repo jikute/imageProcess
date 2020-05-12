@@ -1,0 +1,2 @@
+C:\Users\cth\Documents\GitHub\imageProcess\image\Debug\image.exe
+C:\Users\cth\Documents\GitHub\imageProcess\image\Debug\image.pdb
