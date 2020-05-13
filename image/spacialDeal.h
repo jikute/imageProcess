@@ -32,3 +32,6 @@ void medianf(unsigned char** out, unsigned char** image, \
 /* power law of gray scale image*/
 void power(unsigned char** out, unsigned char** image, \
 	int row, int column, double exponent);
+/* get the gray level histogram of input image*/
+void getHistogram(int* pr, unsigned char** image, \
+	int row, int column);

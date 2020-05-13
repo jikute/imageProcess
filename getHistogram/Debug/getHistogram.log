@@ -1,5 +1,0 @@
-﻿  getHistogram.c
-E:\C_file\getHistogram\getHistogram.c(63,20): warning C4047: 'function': 'unsigned char *' differs in levels of indirection from 'unsigned char [480][640]'
-E:\C_file\getHistogram\getHistogram.c(63,20): warning C4024: 'getHistogram': different types for formal and actual parameter 1
-E:\C_file\getHistogram\getHistogram.c(26,9): warning C4101: 'j': unreferenced local variable
-  getHistogram.vcxproj -> E:\C_file\getHistogram\Debug\getHistogram.exe

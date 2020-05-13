@@ -386,3 +386,28 @@ void power(unsigned char** out, unsigned char** image,\
 	}
 	printf("power image success, exponent=%f\n",exponent);
 }
+
+/* get the gray level histogram of input image*/
+void getHistogram(int* pr, unsigned char** image,\
+	int row, int column)
+{
+	for (int i = 0; i < 256; i++)
+	{
+		pr[i] = 0;
+	}
+	for (int x = 0; x < row; x++)
+	{
+		for (int y = 0; y < column; y++)
+		{
+			for (int level = 0; level < 256; level++)
+			{
+				if (image[x][y] == level)
+				{
+					pr[level] = pr[level] + 1;
+					break;
+				}
+			}
+		}
+	}
+	printf("get histogram success\n");
+}

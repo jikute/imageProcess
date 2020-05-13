@@ -13,8 +13,15 @@ int main()
 	for (int i = 0; i < row; i++)
 		image[i] = malloc(sizeof(unsigned char) * column);
 	readImage(image, row, column, "cat.raw");
-
+	
+	int* pr = (int*)malloc(sizeof(int) * 256);
+	getHistogram(pr, image, row, column);
+	for (int i = 0; i < 256; i++)
+	{
+		printf("level=%d,pr=%d\n",i,pr[i]);
+	}
 	//shrink the Image
+	/*
 	// create a buffer to store the operated image
 	int oRow = row;
 	int oColumn = column;
@@ -34,4 +41,6 @@ int main()
 	for (int i = 0; i < row; i++)
 		free(outImage[i]);
 	free(outImage);
+	*/
+	return 0;
 }
