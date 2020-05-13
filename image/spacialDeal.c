@@ -411,3 +411,75 @@ void getHistogram(int* pr, unsigned char** image,\
 	}
 	printf("get histogram success\n");
 }
+
+/*histogram equalization*/
+void histogramEqualizate(unsigned char** out, \
+	unsigned char** image, int row, int column)
+{
+	int L = 256;
+	// get the gray level distribution of original picture
+	int* pro = (int*)malloc(sizeof(int*) * L);
+	for (int i = 0; i < L; i++)
+	{
+		pro[i] = 0;
+	}
+	getHistogram(pro,image,row,column);
+
+	// get the cumulative distribution of original picture
+	int* cuo = (int*)malloc(sizeof(int*) * L);
+	cuo[0] = pro[0];
+	for (int i = 1; i < L; i++)
+	{
+		cuo[i] = cuo[i - 1] + pro[i];
+	}
+	free(pro);
+
+	// construct desired cumulative distribution
+	int* cud = (int*)malloc(sizeof(int*) * L);
+	cud[0] = row * column / L;
+	for (int i = 1; i < L; i++)
+	{
+		cud[i] = cud[i - 1] + cud[0];
+	}
+
+	// get mro (ouput versus input)
+	unsigned char* mro = (unsigned char*)malloc(sizeof(char*) * L);
+	for (int i = 0; i < L; i++)
+	{
+		for (int j = 0; j < L; j++)
+		{
+			if (j == 255)
+			{
+				mro[i] = j;
+				break;
+			}
+			int a = cuo[i] - cud[j];
+			int b = cuo[i] - cud[j + 1];
+			if (abs(a) <= abs(b))
+			{
+				mro[i] = j;
+				break;
+			}
+		}
+	}
+	free(cuo);
+	free(cud);
+
+	// transform image with mro
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < column; j++)
+		{
+			for (int level = 0; level < L; level++)
+			{
+				if (image[i][j] == level)
+				{
+					out[i][j] = mro[level];
+					break;
+				}
+			}
+		}
+	}
+	free(mro);
+	printf("image histogram equlization success\n");
+}

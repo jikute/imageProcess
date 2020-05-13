@@ -35,3 +35,6 @@ void power(unsigned char** out, unsigned char** image, \
 /* get the gray level histogram of input image*/
 void getHistogram(int* pr, unsigned char** image, \
 	int row, int column);
+/*histogram equalization*/
+void histogramEqualizate(unsigned char** out, \
+	unsigned char** image, int row, int column);
