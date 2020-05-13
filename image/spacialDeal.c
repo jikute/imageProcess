@@ -81,6 +81,8 @@ void shrink(unsigned char** sImage, int sRow, int sColumn, \
 }
 
 /* arithmetric mean filter*/
+/* variables: output image, input image,
+              row of image, colum of image, size of mask*/
 void amf(unsigned char**out, unsigned char** image,\
 	int row, int column, int size)
 {
@@ -482,4 +484,167 @@ void histogramEqualizate(unsigned char** out, \
 	}
 	free(mro);
 	printf("image histogram equlization success\n");
+}
+
+/*laplace transform of a image, center value is -8*/
+/*variables: output image, input image, row of image, column of image
+*/
+void laplace(unsigned char** out, \
+	unsigned char** image, int row, int column)
+{
+	// create a buffer
+	int** buffer = (int**)malloc(sizeof(int*) * row);
+	for (int i = 0; i < row; i++)
+		buffer[i] = malloc(sizeof(int) * column);
+
+	// laplace transform and send the transformed value to buffer 
+	for (int x = 0; x < row; x++)
+	{
+		for (int y = 0; y < column; y++)
+		{
+			if (x - 1 < 0 || x + 1 >= row)
+			{
+				buffer[x][y] = image[x][y];
+				continue;
+			}
+			if (y - 1 < 0 || y + 1 >= column)
+			{
+				buffer[x][y] = image[x][y];
+				continue;
+			}
+			int sum = 0;
+			for (int i = x - 1; i <= x + 1; i++)
+			{
+				for (int j = y - 1; j <= y + 1; j++)
+				{
+					if (i == x && j == y)
+						sum = sum - 8 * image[i][j];
+					else
+						sum = sum + image[i][j];
+				}
+			}
+			buffer[x][y] = sum;
+		}
+	}
+	// find the smallest value in buffer
+	int smallestNumber = buffer[0][0];
+	int largestNumber = buffer[0][0];
+	for (int x = 0; x < row; x++)
+	{
+		for (int y = 0; y < column; y++)
+		{
+			if (buffer[x][y] < smallestNumber)
+			{
+				smallestNumber = buffer[x][y];
+			}
+			if (buffer[x][y] > largestNumber)
+			{
+				largestNumber = buffer[x][y];
+			}
+			else
+				continue;
+		}
+	}
+	int constant;
+	if (smallestNumber < 0)
+	{
+		constant = 0 - smallestNumber;
+	}
+	else
+	{
+		constant = 0;
+	}
+	double scale;
+	if (largestNumber + constant > 255)
+	{
+		scale = 255 / ((double)largestNumber + (double)constant);
+	}
+	else
+	{
+		scale = 1;
+	}
+	// scale the buffer
+	for (int x = 0; x < row; x++)
+	{
+		for (int y = 0; y < column; y++)
+		{
+			out[x][y] = (unsigned char)(scale * ((double)buffer[x][y] + (double)constant));
+		}
+	}
+	printf("laplace transform success\n");
+	// free buffer
+	for (int i = 0; i < row; i++)
+		free(buffer[i]);
+	free(buffer);
+}
+
+/*using image1 substract image2 */
+/*variables: out image, the minus, the substracted,
+             row of images, row of columns*/
+void subtract(unsigned char** out,\
+	unsigned char** image1, unsigned char** image2, \
+	int row, int column)
+{
+	// create a buffer
+	int** buffer = (int**)malloc(sizeof(int*) * row);
+	for (int i = 0; i < row; i++)
+		buffer[i] = malloc(sizeof(int) * column);
+	// substract
+	for (int x = 0; x < row; x++)
+	{
+		for (int y = 0; y < column; y++)
+		{
+			buffer[x][y] = image1[x][y] - image2[x][y];
+		}
+	}
+	// find the smallest value in buffer
+	int smallestNumber = buffer[0][0];
+	int largestNumber = buffer[0][0];
+	for (int x = 0; x < row; x++)
+	{
+		for (int y = 0; y < column; y++)
+		{
+			if (buffer[x][y] < smallestNumber)
+			{
+				smallestNumber = buffer[x][y];
+			}
+			if (buffer[x][y] > largestNumber)
+			{
+				largestNumber = buffer[x][y];
+			}
+			else
+				continue;
+		}
+	}
+	int constant;
+	if (smallestNumber < 0)
+	{
+		constant = 0 - smallestNumber;
+	}
+	else
+	{
+		constant = 0;
+	}
+	double scale;
+	if (largestNumber + constant > 255)
+	{
+		scale = 255 / ((double)largestNumber + (double)constant);
+	}
+	else
+	{
+		scale = 1;
+	}
+	// scale the buffer
+	for (int x = 0; x < row; x++)
+	{
+		for (int y = 0; y < column; y++)
+		{
+			out[x][y] = (unsigned char)(scale * ((double)buffer[x][y] + (double)constant));
+		}
+	}
+	printf("substract success\n");
+	// free buffer
+	for (int i = 0; i < row; i++)
+		free(buffer[i]);
+	free(buffer);
 }

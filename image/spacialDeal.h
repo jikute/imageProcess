@@ -38,3 +38,10 @@ void getHistogram(int* pr, unsigned char** image, \
 /*histogram equalization*/
 void histogramEqualizate(unsigned char** out, \
 	unsigned char** image, int row, int column);
+/*laplace transform of a image, center value is -8*/
+void laplace(unsigned char** out, \
+	unsigned char** image, int row, int column);
+/*using image1 substract image2 */
+void subtract(unsigned char** out, \
+	unsigned char** image1, unsigned char** image2, \
+	int row, int column);

@@ -14,22 +14,30 @@ int main()
 		image[i] = malloc(sizeof(unsigned char) * column);
 	readImage(image, row, column, "cat.raw");
 	
-	//shrink the Image
 	// create a buffer to store the operated image
-	int oRow = row;
-	int oColumn = column;
 	unsigned char** outImage = \
-		(unsigned char**)malloc(sizeof(unsigned char*) * oRow);
-	for (int i = 0; i < oRow; i++)
-		outImage[i] = malloc(sizeof(unsigned char) * oColumn);
-
-	// zoom image
-	histogramEqualizate(outImage, image, row, column);
-	// free the image buffer
+		(unsigned char**)malloc(sizeof(unsigned char*) * row);
 	for (int i = 0; i < row; i++)
+		outImage[i] = malloc(sizeof(unsigned char) * column);
+	// create a buffer to store the laplaced image
+	unsigned char** laImage = \
+		(unsigned char**)malloc(sizeof(unsigned char*) * row);
+	for (int i = 0; i < row; i++)
+		laImage[i] = malloc(sizeof(unsigned char) * column);
+
+	// operate image
+	laplace(laImage, image, row, column);
+	subtract(outImage, image, laImage, row, column);
+	// free the image buffer and laplaced buffer
+	for (int i = 0; i < row; i++)
+	{
 		free(image[i]);
+		free(laImage[i]);
+	}
 	free(image);
-	writeImage(outImage,oRow,oColumn,"power.raw");
+	free(laImage);
+
+	writeImage(outImage,row,column,"sharp.raw");
 	// free output buffer
 	for (int i = 0; i < row; i++)
 		free(outImage[i]);
