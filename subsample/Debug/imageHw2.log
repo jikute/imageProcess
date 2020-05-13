@@ -1,7 +1,0 @@
-﻿  rw.c
-E:\C_file\imageHw2\rw.c(7,25): warning C4129: 'C': unrecognized character escape sequence
-E:\C_file\imageHw2\rw.c(7,25): warning C4129: 'i': unrecognized character escape sequence
-E:\C_file\imageHw2\rw.c(7,25): warning C4129: 'c': unrecognized character escape sequence
-E:\C_file\imageHw2\rw.c(8,29): warning C4090: 'function': different 'const' qualifiers
-E:\C_file\imageHw2\rw.c(8,35): error C2198: 'fopen_s': too few arguments for call
-E:\C_file\imageHw2\rw.c(8,1): warning C4047: 'initializing': 'FILE *' differs in levels of indirection from 'errno_t'

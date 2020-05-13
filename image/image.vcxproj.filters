@@ -18,18 +18,18 @@
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="changeSize.c">
+    <ClCompile Include="ImageIO.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImageIO.c">
+    <ClCompile Include="spacialDeal.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="changeSize.h">
+    <ClInclude Include="ImageIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImageIO.h">
+    <ClInclude Include="spacialDeal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,0 @@
-E:\C_file\imageHw2\x64\Debug\subsample.exe
-E:\C_file\imageHw2\x64\Debug\subsample.pdb
-E:\C_file\subsample\x64\Debug\subsample.exe
-E:\C_file\subsample\x64\Debug\subsample.pdb

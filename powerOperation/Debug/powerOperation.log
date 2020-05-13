@@ -1,3 +1,0 @@
-﻿  powerOperate.c
-E:\C_file\powerOperation\powerOperate.c(51,41): warning C4244: '=': conversion from 'double' to 'unsigned char', possible loss of data
-  powerOperation.vcxproj -> E:\C_file\powerOperation\Debug\powerOperation.exe
