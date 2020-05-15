@@ -45,3 +45,7 @@ void laplace(unsigned char** out, \
 void subtract(unsigned char** out, \
 	unsigned char** image1, unsigned char** image2, \
 	int row, int column);
+/* convolution of image1 and image2 */
+void convolution(unsigned char** out, \
+	unsigned char** image1, unsigned char** image2, \
+	int row1, int column1, int row2, int column2);

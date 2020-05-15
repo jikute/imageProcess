@@ -541,8 +541,6 @@ void laplace(unsigned char** out, \
 			{
 				largestNumber = buffer[x][y];
 			}
-			else
-				continue;
 		}
 	}
 	int constant;
@@ -563,25 +561,25 @@ void laplace(unsigned char** out, \
 	{
 		scale = 1;
 	}
-	// scale the buffer
-	for (int x = 0; x < row; x++)
+// scale the buffer
+for (int x = 0; x < row; x++)
+{
+	for (int y = 0; y < column; y++)
 	{
-		for (int y = 0; y < column; y++)
-		{
-			out[x][y] = (unsigned char)(scale * ((double)buffer[x][y] + (double)constant));
-		}
+		out[x][y] = (unsigned char)(scale * ((double)buffer[x][y] + (double)constant));
 	}
-	printf("laplace transform success\n");
-	// free buffer
-	for (int i = 0; i < row; i++)
-		free(buffer[i]);
-	free(buffer);
+}
+printf("laplace transform success\n");
+// free buffer
+for (int i = 0; i < row; i++)
+	free(buffer[i]);
+free(buffer);
 }
 
 /*using image1 substract image2 */
 /*variables: out image, the minus, the substracted,
-             row of images, row of columns*/
-void subtract(unsigned char** out,\
+			 row of images, row of columns*/
+void subtract(unsigned char** out, \
 	unsigned char** image1, unsigned char** image2, \
 	int row, int column)
 {
@@ -647,4 +645,231 @@ void subtract(unsigned char** out,\
 	for (int i = 0; i < row; i++)
 		free(buffer[i]);
 	free(buffer);
+}
+
+/* convolution of image1 and image2 */
+void convolution(unsigned char** out, \
+	unsigned char** image1, unsigned char** image2, \
+	int row1, int column1, int row2, int column2)
+{
+	// using image2 as mask, make mask's row and column is odd number
+	int maskRow = 0;
+	int maskColumn = 0;
+	if (row2 % 2 == 0 && column2 % 2 == 0)
+	{
+		maskRow = row2 + 1;
+		maskColumn = column2 + 1;
+	}
+	else if (row2 % 2 == 0 && column2 % 2 != 0)
+	{
+		maskRow = row2 + 1;
+		maskColumn = column2;
+	}
+	else if (row2 % 2 != 0 && column2 % 2 == 0)
+	{
+		maskRow = row2;
+		maskColumn = column2 + 1;
+	}
+	else if (row2 % 2 != 0 && column2 % 2 != 0)
+	{
+		maskRow = row2;
+		maskColumn = column2;
+	}
+	// create a mask
+	unsigned char** mask = (unsigned char**)malloc(sizeof(unsigned char*) * maskRow);
+	for (int i = 0; i < maskRow; i++)
+	{
+		mask[i] = malloc(sizeof(unsigned char) * maskColumn);
+	}
+	// set value of mask
+	if (maskRow == row2 && maskColumn == column2) //condition one
+	{
+		for (int x = 0; x < row2; x++)
+		{
+			for (int y = 0; y < column2; y++)
+			{
+				mask[x][y] = image2[x][y];
+			}
+		}
+	}
+	else if (maskRow == row2 && maskColumn > column2) // condition two
+	{
+		for (int x = 0; x < row2; x++)
+		{
+			for (int y = 0; y < column2; y++)
+			{
+				if (y == column2 - 1)
+				{
+					mask[x][y] = 0;
+				}
+				else
+				{
+					mask[x][y] = image2[x][y];
+				}
+			}
+		}
+	}
+	else if (maskRow > row2 && maskColumn == column2) // condition three
+	{
+		for (int x = 0; x < row2; x++)
+		{
+			for (int y = 0; y < column2; y++)
+			{
+				if (x == row2 - 1)
+				{
+					mask[x][y] = 0;
+				}
+				else
+				{
+					mask[x][y] = image2[x][y];
+				}
+			}
+		}
+	}
+	else if (maskRow > row2 && maskColumn > column2) // condition four
+	{
+		for (int x = 0; x < row2; x++)
+		{
+			for (int y = 0; y < column2; y++)
+			{
+				if (x == row2 - 1 || y == column2 - 1)
+				{
+					mask[x][y] = 0;
+				}
+				else
+				{
+					mask[x][y] = image2[x][y];
+				}
+			}
+		}
+	}
+	// get the row and column of downImage
+	int downRow = row1 + maskRow - 1;
+	int downColumn = column1 + maskColumn - 1;
+	// create a buffer to store down image
+	unsigned char** downImage = (unsigned char**)malloc(sizeof(unsigned char*) * downRow);
+	for (int i = 0; i < downRow; i++)
+	{
+		downImage[i] = malloc(sizeof(unsigned char) * downColumn);
+	}
+	// put image1 to downImage
+	for (int x = 0; x < downRow; x++)
+	{
+		for (int y = 0; y < downColumn; y++)
+		{
+			if (x < (downRow - row1) / 2 || x >= (downRow + row1) / 2)
+			{
+				downImage[x][y] = 0;
+				continue;
+			}
+			if (y < (downColumn - column1) / 2 || y >= (downColumn + column1) / 2)
+			{
+				downImage[x][y] = 0;
+				continue;
+			}
+			downImage[x][y] = image1[x - (downRow - row1) / 2][y - (downColumn - column1) / 2];
+		}
+	}
+	// creat output buffer
+	double** outBuffer = (double**)malloc(sizeof(double*) * downRow);
+	for (int i = 0; i < downRow; i++)
+	{
+		outBuffer[i] = malloc(sizeof(double) * downColumn);
+	}
+	// convolution of mask and buffer
+	for (int x = 0; x < downRow; x++)
+	{
+		for (int y = 0; y < downColumn; y++)
+		{
+			double sum = 0;
+			for (int i = -maskRow / 2; i <= maskRow / 2; i++)
+			{
+				for (int j = -maskColumn / 2; j <= maskColumn / 2; j++)
+				{
+					if ((x + i) >= 0 && (x + i) < downRow \
+						&& (y + j) >= 0 && (y + j) < downColumn)
+					{
+						sum = sum + (double)downImage[x + i][y + j] * \
+							(double)mask[maskRow / 2 + i][maskColumn / 2 + j];
+					}
+					else
+					{
+						continue;
+					}
+				}
+			}
+			outBuffer[x][y] = sum;
+		}
+		printf("finish %d row\n", x);
+	}
+	// free mask and downImage
+	for (int i = 0; i < downRow; i++)
+	{
+		free(downImage[i]);
+	}
+	free(downImage);
+	for (int i = 0; i < maskRow; i++)
+	{
+		free(mask[i]);
+	}
+	free(mask);
+	// find the largest value in outbuffer
+	double smallestNumber = outBuffer[0][0];
+	double largestNumber = outBuffer[0][0];
+	for (int x = 0; x < downRow; x++)
+	{
+		for (int y = 0; y < downColumn; y++)
+		{
+			if (outBuffer[x][y] < smallestNumber)
+			{
+				smallestNumber = outBuffer[x][y];
+			}
+			if (outBuffer[x][y] > largestNumber)
+			{
+				largestNumber = outBuffer[x][y];
+			}
+		}
+	}
+	double constant;
+	if (smallestNumber < 0)
+	{
+		constant = 0 - smallestNumber;
+	}
+	else
+	{
+		constant = 0;
+	}
+	double scale;
+	if (largestNumber + constant > 255)
+	{
+		scale = 255 / (largestNumber + constant);
+	}
+	else
+	{
+		scale = 1;
+	}
+	// scale the outBuffer
+	for (int x = 0; x < downRow; x++)
+	{
+		for (int y = 0; y < downColumn; y++)
+		{
+			outBuffer[x][y] = scale * (outBuffer[x][y] + constant);
+		}
+	}
+	// send the value from outBuffer to out
+	int outRow = row1 + row2 - 1;
+	int outColumn = column1 + column2 - 1;
+	for (int x = 0; x < outRow; x++)
+	{
+		for (int y = 0; y < outColumn; y++)
+		{
+			out[x][y] = (unsigned char)outBuffer[x][y];
+		}
+	}
+	printf("convolution success\n");
+	for (int i = 0; i < downRow; i++)
+	{
+		free(outBuffer[i]);
+	}
+	free(outBuffer);
 }
