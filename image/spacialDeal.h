@@ -49,3 +49,12 @@ void subtract(unsigned char** out, \
 void convolution(unsigned char** out, \
 	unsigned char** image1, unsigned char** image2, \
 	int row1, int column1, int row2, int column2);
+
+/*generate a spacial Gaussian filter*/
+void Gaussian(int** out, double A, \
+	int meanx, int meany, int sigmax, int sigmay);
+
+/* convolution of image1 and filter */
+void filter(unsigned char** out, \
+	unsigned char** image1, int** filter, \
+	int row1, int column1, int row2, int column2);

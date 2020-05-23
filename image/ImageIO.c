@@ -37,5 +37,6 @@ void writeImage(unsigned char** image, \
 	}
 	for (int x = 0; x < row; x++)
 		fwrite(image[x], 1, column, fp);
+	fclose(fp);
 	printf("write sucess\n");
 }

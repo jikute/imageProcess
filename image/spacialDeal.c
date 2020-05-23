@@ -873,3 +873,113 @@ void convolution(unsigned char** out, \
 	}
 	free(outBuffer);
 }
+
+/*generate a spacial Gaussian filter*/
+void Gaussian(int** out, double A, \
+	int meanx, int meany, int sigmax, int sigmay)
+{
+	for (int x = 0; x <= 2*meanx; x++)
+	{
+		for (int y = 0; y <= 2*meany; y++)
+		{
+			out[x][y] = (int)(A * exp(-pow((double)x - meanx, 2) / (2 * pow(sigmax, 2))\
+				+ -pow((double)y - meany, 2) / (2 * pow(sigmay, 2))));
+		}
+	}
+}
+
+/* convolution of image1 and filter */
+void filter(unsigned char** out, \
+	unsigned char** image1, int** filter, \
+	int row1, int column1, int row2, int column2)
+{
+	// creat output buffer
+	double** outBuffer = (double**)malloc(sizeof(double*) * row1);
+	for (int i = 0; i < row1; i++)
+	{
+		outBuffer[i] = malloc(sizeof(double) * column1);
+	}
+	// convolution of mask and buffer
+	for (int x = 0; x < row1; x++)
+	{
+		for (int y = 0; y < column1; y++)
+		{
+			double sum = 0;
+			for (int i = -row2 / 2; i <= row2 / 2; i++)
+			{
+				for (int j = -column2 / 2; j <= column2 / 2; j++)
+				{
+					if ((x + i) >= 0 && (x + i) < row1 \
+						&& (y + j) >= 0 && (y + j) < column1)
+					{
+						sum = sum + (double)image1[x + i][y + j] * \
+							(double)filter[row2 / 2 + i][column2 / 2 + j];
+					}
+					else
+					{
+						continue;
+					}
+				}
+			}
+			outBuffer[x][y] = sum;
+		}
+		printf("finish %d row\n", x);
+	}
+	// find the largest value in outbuffer
+	double smallestNumber = outBuffer[0][0];
+	double largestNumber = outBuffer[0][0];
+	for (int x = 0; x < row1; x++)
+	{
+		for (int y = 0; y < column1; y++)
+		{
+			if (outBuffer[x][y] < smallestNumber)
+			{
+				smallestNumber = outBuffer[x][y];
+			}
+			if (outBuffer[x][y] > largestNumber)
+			{
+				largestNumber = outBuffer[x][y];
+			}
+		}
+	}
+	double constant;
+	if (smallestNumber < 0)
+	{
+		constant = 0 - smallestNumber;
+	}
+	else
+	{
+		constant = 0;
+	}
+	double scale;
+	if (largestNumber + constant > 255)
+	{
+		scale = 255 / (largestNumber + constant);
+	}
+	else
+	{
+		scale = 1;
+	}
+	// scale the outBuffer
+	for (int x = 0; x < row1; x++)
+	{
+		for (int y = 0; y < column1; y++)
+		{
+			outBuffer[x][y] = scale * (outBuffer[x][y] + constant);
+		}
+	}
+	// send the value from outBuffer to out
+	for (int x = 0; x < row1; x++)
+	{
+		for (int y = 0; y < column1; y++)
+		{
+			out[x][y] = (unsigned char)outBuffer[x][y];
+		}
+	}
+	printf("convolution success\n");
+	for (int i = 0; i < row1; i++)
+	{
+		free(outBuffer[i]);
+	}
+	free(outBuffer);
+}
