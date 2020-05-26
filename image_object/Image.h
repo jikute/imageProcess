@@ -1,16 +1,17 @@
 #pragma once
 class Image
 {
-private:
+public:
 	int row;
 	int column;
-
-public:
 	unsigned char** content;
+	Image();
 	Image(int row, int column);
 	~Image();
 	// read image from file
-	void readImage(char* infile);
+	void readImage(const char* infile);
 	// write image to a file
-	void writeImage(char* outfile);
+	void writeImage(const char* outfile);
+	// interpolate an image
+	void interpolate(Image* image, const char* way);
 };
