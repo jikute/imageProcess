@@ -4,12 +4,6 @@
 #include"Image.h"
 
 // construct function of class Image
-Image::Image()
-{
-	row = 0;
-	column = 0;
-	content = NULL;
-}
 
 Image::Image(int row, int column)
 {
@@ -116,3 +110,5 @@ void Image::interpolate(Image* image, const char* way)
 		printf("parameter is wrong\n");
 	}
 }
+
+// fourier transform of an image
