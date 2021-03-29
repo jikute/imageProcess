@@ -11,27 +11,10 @@ int main()
 	unsigned char** image = \
 		(unsigned char**)malloc(sizeof(unsigned char*) * row);
 	for (int i = 0; i < row; i++)
-		image[i] = malloc(sizeof(unsigned char) * column);
-	readImage(image, row, column, "triangle.raw");
-
-	// create a buffer to store the operated image
-	int outRow = row;
-	int outColumn = column;
-	unsigned char** outImage = \
-		(unsigned char**)malloc(sizeof(unsigned char*) * outRow);
-	for (int i = 0; i < outRow; i++)
-		outImage[i] = malloc(sizeof(unsigned char) * outColumn);
-	filter(outImage, image, gfilter, row, column, rowF, columnF);
-	// free the image buffer and filter
-	for (int i = 0; i < row; i++)
 	{
-		free(image[i]);
+		image[i] = malloc(sizeof(unsigned char) * column);
 	}
-	free(image);
-	writeImage(outImage,outRow,outColumn,"degradedTriangle.raw");
-	// free output buffer
-	for (int i = 0; i < outRow; i++)
-		free(outImage[i]);
-	free(outImage);
+	// read the original image
+	readImage(image, row, column, "triangle.raw");
 	return 0;
 }
